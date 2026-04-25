@@ -83,7 +83,7 @@ export class UsenetSearcher {
       // Build full URL for logging
       const urlObj = new URL(effectiveUrl);
       for (const [key, value] of Object.entries(params)) {
-        urlObj.searchParams.set(key, value);
+        urlObj.searchParams.set(key, String(value));
       }
       console.log(`   📡 API Call: ${urlObj.toString()}`);
 
