@@ -80,6 +80,13 @@ export class UsenetSearcher {
 
       const userAgent = config.userAgents?.indexerSearch || getLatestVersions().chrome;
 
+      // Build full URL for logging
+      const urlObj = new URL(effectiveUrl);
+      for (const [key, value] of Object.entries(params)) {
+        urlObj.searchParams.set(key, value);
+      }
+      console.log(`   📡 API Call: ${urlObj.toString()}`);
+
       // SAFETY: Skip proxy when Zyclops is enabled — Zyclops IS the proxy
       if (!isZyclops) {
         await logProxyExitIp(this.indexer.url, 'search');
@@ -92,6 +99,7 @@ export class UsenetSearcher {
       });
 
       console.log(`✅ Response received (${response.status}), parsing...`);
+      console.log(`   📥 Raw response:`, response.data);
 
       const { results, total } = await parseNewznabXmlWithMeta(response.data);
       console.log(`   📦 Found ${results.length} results${total ? ` (total: ${total})` : ''}`);
